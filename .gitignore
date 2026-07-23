@@ -1,0 +1,31 @@
+# Node (backend)
+node_modules/
+npm-debug.log*
+.env
+
+# Flutter (mobile)
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/.pub-cache/
+mobile/.pub/
+mobile/build/
+mobile/**/android/**/gradle-wrapper.jar
+mobile/**/android/.gradle
+mobile/**/android/local.properties
+mobile/**/ios/Flutter/.last_build_id
+mobile/**/*.iml
+
+# APK / build artifacts
+*.apk
+*.aab
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
