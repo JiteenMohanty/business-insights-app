@@ -1,0 +1,162 @@
+{
+  "info": {
+    "_postman_id": "b3f1a2c4-5d6e-4f7a-8b9c-0d1e2f3a4b5c",
+    "name": "Business Insights App",
+    "description": "API collection for the Business Insights Mobile App assignment. Covers POST /login, GET /business, GET /insights, GET /reviews.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string",
+      "description": "Switch this to the deployed Render URL to test the live API."
+    }
+  ],
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"owner@abcsalon.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["login"]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - Login successful",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"owner@abcsalon.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": true,\n  \"data\": { \"email\": \"owner@abcsalon.com\" },\n  \"message\": \"Login successful\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Business",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/business",
+          "host": ["{{baseUrl}}"],
+          "path": ["business"]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - Business details",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/business",
+              "host": ["{{baseUrl}}"],
+              "path": ["business"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"name\": \"ABC Salon\",\n    \"category\": \"Beauty Salon\",\n    \"address\": \"Hyderabad\",\n    \"phone\": \"9876543210\",\n    \"rating\": 4.2,\n    \"total_reviews\": 120\n  },\n  \"message\": \"Business details fetched successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Insights",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/insights",
+          "host": ["{{baseUrl}}"],
+          "path": ["insights"]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - Insights",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/insights",
+              "host": ["{{baseUrl}}"],
+              "path": ["insights"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"profile_views\": 1200,\n    \"search_views\": 800,\n    \"website_clicks\": 150,\n    \"phone_calls\": 60,\n    \"direction_requests\": 40\n  },\n  \"message\": \"Insights fetched successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Reviews",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/reviews",
+          "host": ["{{baseUrl}}"],
+          "path": ["reviews"]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - Reviews list",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"name\": \"Ravi\",\n      \"rating\": 5,\n      \"comment\": \"Good service\",\n      \"date\": \"2026-03-20\"\n    },\n    {\n      \"name\": \"Priya\",\n      \"rating\": 4,\n      \"comment\": \"Nice experience\",\n      \"date\": \"2026-03-18\"\n    }\n  ],\n  \"message\": \"Reviews fetched successfully\"\n}"
+        }
+      ]
+    }
+  ]
+}
