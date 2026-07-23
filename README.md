@@ -85,7 +85,58 @@ npm test
 
 ### Mobile
 
-TBD (Phase 3)
+Requires the Flutter SDK (3.29+) with the Android toolchain. Confirm your setup with
+`flutter doctor`.
+
+```bash
+cd mobile
+flutter pub get
+flutter run              # runs on a connected device or emulator
+```
+
+**Point the app at the right backend.** The API base URL lives in one place —
+[mobile/lib/config/app_config.dart](mobile/lib/config/app_config.dart):
+
+- `useLocalApi = true` (default) → talks to a locally running backend. On the **Android
+  emulator**, the host machine's `localhost` is reachable at `http://10.0.2.2:5000`
+  (already the default). On a **physical device**, set `localBaseUrl` to your computer's
+  LAN IP (e.g. `http://192.168.1.5:5000`) and keep the phone on the same Wi-Fi network.
+- `useLocalApi = false` → talks to the deployed backend. Set `prodBaseUrl` to your live
+  Render URL first.
+
+> Cleartext HTTP is allowed only for `localhost`/`10.0.2.2` (see
+> `mobile/android/app/src/main/res/xml/network_security_config.xml`); the Render backend
+> is served over HTTPS.
+
+**Demo login credentials** (seeded by the backend's `npm run seed`):
+
+- Email: `owner@abcsalon.com`
+- Password: `password123`
+
+(The login screen also has a **Fill demo credentials** button.)
+
+Run the mobile widget tests:
+
+```bash
+flutter test
+```
+
+#### Build the release APK
+
+```bash
+cd mobile
+flutter build apk --release
+```
+
+The APK is written to:
+
+```
+mobile/build/app/outputs/flutter-apk/app-release.apk
+```
+
+> For the submission APK, set `useLocalApi = false` and `prodBaseUrl` to the live Render
+> URL in `app_config.dart` **before** running the build, so the installed app talks to
+> the deployed API rather than localhost.
 
 ## Deployment (Render)
 
@@ -121,10 +172,39 @@ Steps to deploy from the Render dashboard:
 
 ```
 business-insights-app/
-├── backend/          # Node.js + Express API
-├── mobile/           # Flutter app
-├── postman/          # Postman collection
-├── docs/             # architecture notes
+├── backend/                # Node.js + Express API
+│   ├── config/             # Mongoose connection
+│   ├── controllers/        # request handlers (auth, business, insights, reviews)
+│   ├── models/             # Mongoose schemas (User, Business, Insight, Review)
+│   ├── routes/             # Express routers
+│   ├── utils/              # shared JSON response helpers
+│   ├── tests/              # Jest + Supertest endpoint tests
+│   ├── seed.js             # inserts the sample dummy data
+│   ├── app.js              # Express app (middleware + routes)
+│   └── server.js           # entry point (connects DB, starts server)
+├── mobile/                 # Flutter app
+│   └── lib/
+│       ├── config/         # app_config.dart — the one place to set the API URL
+│       ├── core/           # theme + formatters
+│       ├── data/           # ApiClient + models (the network layer)
+│       ├── logic/          # BLoC/Cubits per feature (business, insights, reviews)
+│       ├── controllers/    # GetX controllers (auth, bottom-nav)
+│       ├── routes/         # GetX route table
+│       ├── screens/        # Login, Home, Dashboard, Business, Reviews
+│       └── widgets/        # reusable UI (cards, chart, star rating, states)
+├── postman/                # Postman collection (all four endpoints)
+├── docs/                   # ARCHITECTURE.md (data model + API contract)
 ├── README.md
 └── .gitignore
 ```
+
+## Submission Artifacts
+
+| Deliverable            | Where |
+|------------------------|-------|
+| GitHub repo (FE + BE)  | this repository |
+| Backend API            | `backend/` — deploy to Render (see above) |
+| Live API URL           | _add your Render URL here after deploying_ |
+| Release APK            | `mobile/build/app/outputs/flutter-apk/app-release.apk` (built locally) |
+| Postman collection     | [postman/business-insights.postman_collection.json](postman/business-insights.postman_collection.json) |
+| Architecture / API doc | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
