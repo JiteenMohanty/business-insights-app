@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/theme.dart';
+import '../theme/app_theme.dart';
 
 /// Centered loading spinner used while a feature is fetching.
 class LoadingView extends StatelessWidget {
@@ -8,11 +8,17 @@ class LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: CircularProgressIndicator());
+    return const Center(
+      child: SizedBox(
+        height: 24,
+        width: 24,
+        child: CircularProgressIndicator(strokeWidth: 2.2),
+      ),
+    );
   }
 }
 
-/// Error state with a message and a retry button.
+/// Error state with a message and a retry action.
 class ErrorView extends StatelessWidget {
   const ErrorView({super.key, required this.message, required this.onRetry});
 
@@ -23,22 +29,25 @@ class ErrorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.cloud_off_rounded,
-                size: 48, color: AppColors.textSecondary),
-            const SizedBox(height: 16),
+            Icon(
+              Icons.cloud_off_outlined,
+              size: 36,
+              color: context.colors.onSurfaceVariant,
+            ),
+            const SizedBox(height: AppSpacing.md),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.textSecondary, height: 1.4),
+              style: context.texts.bodySmall,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.lg),
             OutlinedButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(Icons.refresh_outlined, size: 16),
               label: const Text('Try again'),
             ),
           ],
@@ -63,16 +72,16 @@ class EmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 48, color: AppColors.textSecondary),
-            const SizedBox(height: 16),
+            Icon(icon, size: 36, color: context.colors.onSurfaceVariant),
+            const SizedBox(height: AppSpacing.md),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.textSecondary),
+              style: context.texts.bodySmall,
             ),
           ],
         ),

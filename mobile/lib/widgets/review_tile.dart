@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../core/formatters.dart';
-import '../core/theme.dart';
 import '../data/models/review.dart';
+import '../theme/app_theme.dart';
 import 'app_card.dart';
 import 'star_rating.dart';
 
-/// A single review: avatar with the reviewer's initial, name, date, star
-/// rating, and comment.
+/// A single review: reviewer initial, name, date, star rating, and comment.
 class ReviewTile extends StatelessWidget {
   const ReviewTile({super.key, required this.review});
 
@@ -15,8 +14,7 @@ class ReviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initial =
-        review.name.isNotEmpty ? review.name[0].toUpperCase() : '?';
+    final initial = review.name.isNotEmpty ? review.name[0].toUpperCase() : '?';
 
     return AppCard(
       child: Column(
@@ -24,53 +22,39 @@ class ReviewTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+              Container(
+                height: 30,
+                width: 30,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: context.palette.subtleSurface,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: context.palette.border),
+                ),
                 child: Text(
                   initial,
-                  style: const TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: context.texts.titleSmall,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      review.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
+                    Text(review.name, style: context.texts.titleSmall),
+                    const SizedBox(height: 1),
                     Text(
                       formatReviewDate(review.date),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.textSecondary,
-                      ),
+                      style: context.texts.labelSmall,
                     ),
                   ],
                 ),
               ),
-              StarRating.fromInt(review.rating, size: 16),
+              StarRating.fromInt(review.rating, size: 13),
             ],
           ),
-          const SizedBox(height: 12),
-          Text(
-            review.comment,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.4,
-              color: AppColors.textPrimary,
-            ),
-          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(review.comment, style: context.texts.bodyMedium),
         ],
       ),
     );

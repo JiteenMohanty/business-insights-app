@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../core/formatters.dart';
-import '../core/theme.dart';
 import '../data/models/business.dart';
 import '../logic/business/business_cubit.dart';
 import '../logic/business/business_state.dart';
+import '../theme/app_theme.dart';
 import '../widgets/app_card.dart';
+import '../widgets/section_header.dart';
 import '../widgets/star_rating.dart';
 import '../widgets/status_views.dart';
 
@@ -48,80 +49,70 @@ class _BusinessContent extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () => context.read<BusinessCubit>().load(),
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.screen,
         children: [
           AppCard(
-            padding: const EdgeInsets.all(20),
-            child: Column(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 36,
-                  backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                Container(
+                  height: 44,
+                  width: 44,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: context.palette.subtleSurface,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: context.palette.border),
+                  ),
                   child: Text(
                     initial,
-                    style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.primary,
-                    ),
+                    style: context.texts.headlineSmall,
                   ),
                 ),
-                const SizedBox(height: 14),
-                Text(
-                  business.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    business.category,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    StarRating(rating: business.rating, size: 22),
-                    const SizedBox(width: 8),
-                    Text(
-                      business.rating.toStringAsFixed(1),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        business.name,
+                        style: context.texts.titleLarge,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    Text(
-                      '  ·  ${formatCount(business.totalReviews)} reviews',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textSecondary,
+                      const SizedBox(height: 2),
+                      Text(business.category, style: context.texts.labelSmall),
+                      const SizedBox(height: AppSpacing.sm),
+                      Row(
+                        children: [
+                          StarRating(rating: business.rating, size: 14),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(
+                            business.rating.toStringAsFixed(1),
+                            style: context.texts.titleSmall,
+                          ),
+                          const SizedBox(width: AppSpacing.xs),
+                          Expanded(
+                            child: Text(
+                              '(${formatCount(business.totalReviews)} reviews)',
+                              style: context.texts.labelSmall,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
+          const SectionHeader('Details'),
+          const SizedBox(height: AppSpacing.sm),
           AppCard(
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            padding: EdgeInsets.zero,
             child: Column(
               children: [
                 _InfoRow(
@@ -129,21 +120,27 @@ class _BusinessContent extends StatelessWidget {
                   label: 'Address',
                   value: business.address,
                 ),
-                const Divider(height: 1, color: AppColors.border),
+                const Divider(),
                 _InfoRow(
                   icon: Icons.phone_outlined,
                   label: 'Phone',
                   value: business.phone,
                 ),
-                const Divider(height: 1, color: AppColors.border),
+                const Divider(),
+                _InfoRow(
+                  icon: Icons.category_outlined,
+                  label: 'Category',
+                  value: business.category,
+                ),
+                const Divider(),
                 _InfoRow(
                   icon: Icons.star_outline_rounded,
                   label: 'Rating',
                   value: '${business.rating.toStringAsFixed(1)} / 5',
                 ),
-                const Divider(height: 1, color: AppColors.border),
+                const Divider(),
                 _InfoRow(
-                  icon: Icons.reviews_outlined,
+                  icon: Icons.rate_review_outlined,
                   label: 'Total Reviews',
                   value: formatCount(business.totalReviews),
                 ),
@@ -170,28 +167,23 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.md,
+      ),
       child: Row(
         children: [
-          Icon(icon, size: 22, color: AppColors.primary),
-          const SizedBox(width: 16),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const Spacer(),
-          Flexible(
+          Icon(icon, size: 17, color: context.colors.onSurfaceVariant),
+          const SizedBox(width: AppSpacing.md),
+          Text(label, style: context.texts.labelSmall),
+          const SizedBox(width: AppSpacing.lg),
+          Expanded(
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
+              style: context.texts.titleSmall,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

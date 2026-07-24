@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../logic/reviews/reviews_cubit.dart';
 import '../logic/reviews/reviews_state.dart';
+import '../theme/app_theme.dart';
 import '../widgets/review_tile.dart';
 import '../widgets/status_views.dart';
 
@@ -33,9 +34,10 @@ class ReviewsScreen extends StatelessWidget {
             return RefreshIndicator(
               onRefresh: () => context.read<ReviewsCubit>().load(),
               child: ListView.separated(
-                padding: const EdgeInsets.all(16),
+                padding: AppSpacing.screen,
                 itemCount: state.reviews.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                separatorBuilder: (_, __) =>
+                    const SizedBox(height: AppSpacing.sm),
                 itemBuilder: (context, index) =>
                     ReviewTile(review: state.reviews[index]),
               ),
@@ -55,10 +57,10 @@ class _EmptyReviews extends StatelessWidget {
       // Ensures pull-to-refresh works even though the content is centered.
       physics: const AlwaysScrollableScrollPhysics(),
       children: const [
-        SizedBox(height: 160),
+        SizedBox(height: 140),
         EmptyView(
           message: 'No reviews yet.',
-          icon: Icons.reviews_outlined,
+          icon: Icons.rate_review_outlined,
         ),
       ],
     );

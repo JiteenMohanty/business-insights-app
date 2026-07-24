@@ -8,7 +8,10 @@ plugins {
 android {
     namespace = "com.businessinsights.business_insights"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // Pinned to the highest NDK required by the plugins in use (path_provider,
+    // pulled in by get_storage) rather than flutter.ndkVersion, which is lower
+    // and triggers a build warning.
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

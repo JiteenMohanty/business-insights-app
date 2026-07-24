@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../core/theme.dart';
+import '../theme/app_theme.dart';
 
-/// A consistent rounded, bordered surface used across the app instead of the
-/// default [Card], so every panel shares the same look.
+/// A consistent surface used across the app instead of the default [Card]:
+/// hairline border, small radius, and no drop shadow.
 class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(16),
+    this.padding = AppSpacing.card,
   });
 
   final Widget child;
@@ -19,9 +19,9 @@ class AppCard extends StatelessWidget {
     return Container(
       padding: padding,
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: context.palette.border),
       ),
       child: child,
     );

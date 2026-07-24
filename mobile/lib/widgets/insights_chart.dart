@@ -1,11 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../core/theme.dart';
 import '../data/models/insights.dart';
+import '../theme/app_theme.dart';
 
-/// Bar chart that visualizes all five insight metrics together (satisfies the
-/// assignment's chart bonus). Each bar uses the same color as its metric card.
+/// Bar chart visualizing all five insight metrics together. Each bar uses the
+/// same muted accent as its metric card, and all colors resolve from the active
+/// theme so the chart reads correctly in both light and dark mode.
 class InsightsChart extends StatelessWidget {
   const InsightsChart({super.key, required this.insights});
 
@@ -13,14 +14,18 @@ class InsightsChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
+    final colors = context.colors;
+    final labelStyle = context.texts.labelSmall;
+
     final values = insights.orderedValues;
     final maxValue =
         values.isEmpty ? 0 : values.reduce((a, b) => a > b ? a : b);
-    // Headroom above the tallest bar so labels/tooltips aren't clipped.
+    // Headroom above the tallest bar so tooltips aren't clipped.
     final maxY = maxValue == 0 ? 10.0 : maxValue * 1.2;
 
     return SizedBox(
-      height: 220,
+      height: 190,
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
@@ -28,23 +33,23 @@ class InsightsChart extends StatelessWidget {
           barTouchData: BarTouchData(
             enabled: true,
             touchTooltipData: BarTouchTooltipData(
-              getTooltipColor: (_) => AppColors.textPrimary,
-              tooltipRoundedRadius: 8,
+              getTooltipColor: (_) => colors.inverseSurface,
+              tooltipRoundedRadius: 6,
               getTooltipItem: (group, _, rod, __) {
                 return BarTooltipItem(
                   '${Insights.fullLabels[group.x]}\n',
-                  const TextStyle(
-                    color: Colors.white,
+                  TextStyle(
+                    color: colors.onInverseSurface,
                     fontWeight: FontWeight.w600,
-                    fontSize: 12,
+                    fontSize: 11,
                   ),
                   children: [
                     TextSpan(
                       text: rod.toY.round().toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: colors.onInverseSurface,
                         fontWeight: FontWeight.w400,
-                        fontSize: 12,
+                        fontSize: 11,
                       ),
                     ),
                   ],
@@ -62,20 +67,17 @@ class InsightsChart extends StatelessWidget {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 28,
+                reservedSize: 26,
                 getTitlesWidget: (value, meta) {
                   final index = value.toInt();
                   if (index < 0 || index >= Insights.shortLabels.length) {
                     return const SizedBox.shrink();
                   }
                   return Padding(
-                    padding: const EdgeInsets.only(top: 8),
+                    padding: const EdgeInsets.only(top: AppSpacing.sm),
                     child: Text(
                       Insights.shortLabels[index],
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: AppColors.textSecondary,
-                      ),
+                      style: labelStyle,
                     ),
                   );
                 },
@@ -87,7 +89,7 @@ class InsightsChart extends StatelessWidget {
             drawVerticalLine: false,
             horizontalInterval: maxY / 4,
             getDrawingHorizontalLine: (_) =>
-                FlLine(color: AppColors.border, strokeWidth: 1),
+                FlLine(color: palette.border, strokeWidth: 1),
           ),
           borderData: FlBorderData(show: false),
           barGroups: [
@@ -97,10 +99,10 @@ class InsightsChart extends StatelessWidget {
                 barRods: [
                   BarChartRodData(
                     toY: values[i].toDouble(),
-                    color: AppColors.metric[i % AppColors.metric.length],
-                    width: 18,
+                    color: palette.metric[i % palette.metric.length],
+                    width: 16,
                     borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(6),
+                      top: Radius.circular(3),
                     ),
                   ),
                 ],

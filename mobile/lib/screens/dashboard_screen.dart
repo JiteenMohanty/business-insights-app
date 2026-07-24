@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../core/theme.dart';
 import '../data/models/insights.dart';
 import '../logic/insights/insights_cubit.dart';
 import '../logic/insights/insights_state.dart';
+import '../theme/app_theme.dart';
 import '../widgets/app_card.dart';
 import '../widgets/insights_chart.dart';
 import '../widgets/metric_card.dart';
+import '../widgets/section_header.dart';
 import '../widgets/status_views.dart';
 
 /// Insights dashboard: five metric cards + a bar chart of all metrics together.
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
-  // Icons for each metric, in the same order as Insights.orderedValues.
+  // Outlined icons, in the same order as Insights.orderedValues.
   static const _icons = [
     Icons.visibility_outlined,
-    Icons.search_rounded,
-    Icons.ads_click_rounded,
+    Icons.search_outlined,
+    Icons.ads_click_outlined,
     Icons.call_outlined,
     Icons.directions_outlined,
   ];
@@ -53,57 +54,43 @@ class _InsightsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final values = insights.orderedValues;
+    final metricColors = context.palette.metric;
 
     return RefreshIndicator(
       onRefresh: () => context.read<InsightsCubit>().load(),
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.screen,
         children: [
-          const _SectionTitle('Engagement Insights'),
-          const SizedBox(height: 12),
-          GridView.count(
-            crossAxisCount: 2,
+          const SectionHeader('Engagement Insights'),
+          const SizedBox(height: AppSpacing.sm),
+          GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 1.35,
-            children: [
-              for (var i = 0; i < values.length; i++)
-                MetricCard(
-                  label: Insights.fullLabels[i],
-                  value: values[i],
-                  icon: icons[i],
-                  color: AppColors.metric[i % AppColors.metric.length],
-                ),
-            ],
+            itemCount: values.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: AppSpacing.sm,
+              crossAxisSpacing: AppSpacing.sm,
+              // A fixed row height (rather than childAspectRatio) keeps the
+              // card height independent of device width, so the content can't
+              // be squeezed into too little vertical space.
+              mainAxisExtent: MetricCard.gridExtent,
+            ),
+            itemBuilder: (context, i) => MetricCard(
+              label: Insights.fullLabels[i],
+              value: values[i],
+              icon: icons[i],
+              accent: metricColors[i % metricColors.length],
+            ),
           ),
-          const SizedBox(height: 20),
-          const _SectionTitle('Metrics Overview'),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.lg),
+          const SectionHeader('Metrics Overview'),
+          const SizedBox(height: AppSpacing.sm),
           AppCard(
             child: InsightsChart(insights: insights),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.sm),
         ],
-      ),
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
       ),
     );
   }

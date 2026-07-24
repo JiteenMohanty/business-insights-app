@@ -42,6 +42,9 @@ dependencies:
   flutter_bloc: ^8.1.6
   equatable: ^2.0.5
 
+  # Persists the selected theme mode across app restarts (GetX ecosystem).
+  get_storage: ^2.1.1
+
   # HTTP client for the four backend endpoints.
   http: ^1.2.2
 

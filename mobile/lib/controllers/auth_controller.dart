@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../core/theme.dart';
 import '../data/api_client.dart';
 import '../routes/app_routes.dart';
 
@@ -34,9 +33,10 @@ class AuthController extends GetxController {
         'Login failed',
         e.toString(),
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: AppColors.error,
-        colorText: Colors.white,
-        margin: const EdgeInsets.all(16),
+        backgroundColor: Get.theme.colorScheme.error,
+        colorText: Get.theme.colorScheme.onError,
+        margin: const EdgeInsets.all(12),
+        borderRadius: 8,
         duration: const Duration(seconds: 3),
       );
     } finally {
