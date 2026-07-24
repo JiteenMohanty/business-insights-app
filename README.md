@@ -205,7 +205,7 @@ business-insights-app/
 | GitHub repo (FE + BE)  | this repository |
 | Backend API            | `backend/` — deploy to Render (see above) |
 | Live API URL           | https://business-insights-app-vpfx.onrender.com |
-| Release APK            | `mobile/build/app/outputs/flutter-apk/app-release.apk` (built locally) |
+| Release APK            | **[Download from GitHub Releases](https://github.com/JiteenMohanty/business-insights-app/releases/latest)** — or build it yourself (see [Build the release APK](#build-the-release-apk)) |
 | Postman collection     | [postman/business-insights.postman_collection.json](postman/business-insights.postman_collection.json) |
 | Architecture / API doc | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
 
