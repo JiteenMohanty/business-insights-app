@@ -8,9 +8,9 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:5000",
+      "value": "https://business-insights-app-vpfx.onrender.com",
       "type": "string",
-      "description": "Switch this to the deployed Render URL to test the live API."
+      "description": "Live Render deployment. Change to http://localhost:5000 to test against a locally running backend. Note: the free-tier service sleeps when idle, so the first request may take 30-60s."
     }
   ],
   "item": [

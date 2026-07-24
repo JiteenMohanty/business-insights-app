@@ -6,11 +6,11 @@
 class AppConfig {
   AppConfig._();
 
-  /// Flip to `false` to point the app at the deployed Render backend.
+  /// Flip to `true` to point the app at a backend running locally.
   ///
-  /// Kept `true` during development so the app talks to a backend running
-  /// locally (see [localBaseUrl]).
-  static const bool useLocalApi = true;
+  /// Kept `false` so the app (and the release APK) talks to the deployed
+  /// Render backend — see [prodBaseUrl].
+  static const bool useLocalApi = false;
 
   /// Local development backend.
   ///
@@ -24,9 +24,13 @@ class AppConfig {
 
   /// Deployed backend on Render (HTTPS).
   ///
-  /// TODO: replace with the real Render URL after deploying the backend, then
-  /// set [useLocalApi] to `false` and rebuild the release APK.
-  static const String prodBaseUrl = 'https://your-service-name.onrender.com';
+  /// No trailing slash — endpoint paths are appended directly.
+  ///
+  /// Note: on Render's free tier the service sleeps after inactivity, so the
+  /// first request after an idle period can take 30–60s to wake it. The API
+  /// client's timeout accounts for this.
+  static const String prodBaseUrl =
+      'https://business-insights-app-vpfx.onrender.com';
 
   /// The base URL the app actually uses, chosen by [useLocalApi].
   static String get baseUrl => useLocalApi ? localBaseUrl : prodBaseUrl;

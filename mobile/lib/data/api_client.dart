@@ -22,7 +22,10 @@ class ApiClient {
   final http.Client _client;
   final String _baseUrl;
 
-  static const Duration _timeout = Duration(seconds: 15);
+  /// Generous by design: the backend runs on Render's free tier, which sleeps
+  /// after inactivity and can take 30–60s to cold-start. A shorter timeout
+  /// would surface a spurious "request timed out" on the first open.
+  static const Duration _timeout = Duration(seconds: 60);
   static const Map<String, String> _jsonHeaders = {
     'Content-Type': 'application/json',
   };

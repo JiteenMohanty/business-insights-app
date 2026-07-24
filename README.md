@@ -97,12 +97,12 @@ flutter run              # runs on a connected device or emulator
 **Point the app at the right backend.** The API base URL lives in one place —
 [mobile/lib/config/app_config.dart](mobile/lib/config/app_config.dart):
 
-- `useLocalApi = true` (default) → talks to a locally running backend. On the **Android
+- `useLocalApi = false` (default) → talks to the deployed Render backend at
+  `prodBaseUrl`. This is how the released APK is built.
+- `useLocalApi = true` → talks to a locally running backend. On the **Android
   emulator**, the host machine's `localhost` is reachable at `http://10.0.2.2:5000`
   (already the default). On a **physical device**, set `localBaseUrl` to your computer's
   LAN IP (e.g. `http://192.168.1.5:5000`) and keep the phone on the same Wi-Fi network.
-- `useLocalApi = false` → talks to the deployed backend. Set `prodBaseUrl` to your live
-  Render URL first.
 
 > Cleartext HTTP is allowed only for `localhost`/`10.0.2.2` (see
 > `mobile/android/app/src/main/res/xml/network_security_config.xml`); the Render backend
@@ -204,7 +204,13 @@ business-insights-app/
 |------------------------|-------|
 | GitHub repo (FE + BE)  | this repository |
 | Backend API            | `backend/` — deploy to Render (see above) |
-| Live API URL           | _add your Render URL here after deploying_ |
+| Live API URL           | https://business-insights-app-vpfx.onrender.com |
 | Release APK            | `mobile/build/app/outputs/flutter-apk/app-release.apk` (built locally) |
 | Postman collection     | [postman/business-insights.postman_collection.json](postman/business-insights.postman_collection.json) |
 | Architecture / API doc | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
+
+> **Note on the live API:** it runs on Render's free tier, which puts the service to
+> sleep after a period of inactivity. The **first** request after an idle period can
+> take 30–60 seconds while the instance wakes up; subsequent requests are fast. The
+> mobile app's HTTP timeout is set to 60s to accommodate this, so the app will wait
+> rather than show an error.
